@@ -1,4 +1,4 @@
-package com.changzhn.sampleCode;
+package com.changzhn.list.sample;
 
 public class MyArrayList<AnyType> implements Iterable<AnyType> {
   private static final int DEFAULT_CAPACITY = 10;
