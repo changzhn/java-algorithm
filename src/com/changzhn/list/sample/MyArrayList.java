@@ -1,10 +1,10 @@
 package com.changzhn.list.sample;
 
-public class MyArrayList<AnyType> implements Iterable<AnyType> {
+public class MyArrayList {
   private static final int DEFAULT_CAPACITY = 10;
 
-  private int theSize;
-  private AnyType[] theItems;
+  private int theSize; // 集合中元素实际的个数
+  private int[] theItems;
 
   public MyArrayList() {
     doClear();
@@ -14,7 +14,7 @@ public class MyArrayList<AnyType> implements Iterable<AnyType> {
     doClear();
   }
 
-  public void doClear() {
+  private void doClear() {
     theSize = 0;
     ensureCapacity(DEFAULT_CAPACITY);
   }
@@ -24,87 +24,71 @@ public class MyArrayList<AnyType> implements Iterable<AnyType> {
   }
 
   public boolean isEmpty() {
-    return size() == 0;
+    return theSize == 0;
   }
 
   public void trimToSize() {
-    ensureCapacity(size());
+    ensureCapacity(theSize);
   }
 
-  public AnyType get(int idx) {
+  public int get(int idx) {
     if (idx < 0 || idx >= size()) {
       throw new ArrayIndexOutOfBoundsException();
     }
     return theItems[idx];
   }
 
-  public AnyType set(int idx, AnyType newVal) {
+  public int set(int idx, int newVal) {
     if (idx < 0 || idx > size()) {
       throw new ArrayIndexOutOfBoundsException();
     }
-    AnyType old = theItems[idx];
+    int old = theItems[idx];
     theItems[idx] = newVal;
     return old;
   }
 
-  public void ensureCapacity(int newCapacity) {
-    if (newCapacity < theSize) {
+  private void ensureCapacity(int newCapacity) {
+    if (newCapacity < size()) {
+      // 如果要扩展的容量不足以容纳现有元素
       return;
     }
-
-    AnyType[] old = theItems;
-    theItems = (AnyType[]) new Object[newCapacity];
+    int[] old = theItems;
+    theItems = new int[newCapacity];
     for(int i = 0; i < size(); i++) {
       theItems[i] = old[i];
     }
+
   }
 
-  public boolean add(AnyType x) {
-    add(size(), x);
+  public boolean add(int x) {
+    add(theSize, x);
     return true;
   }
 
-  public void add(int idx, AnyType x) {
-    if (theItems.length == size()) {
-      ensureCapacity(size() * 2 + 1);
-    }
-
-    for(int i = theSize; i > idx; i--) {
-      theItems[i] = theItems[i - 1];
+  // 向末尾追回一项
+  private void add(int idx, int x) {
+    if (theSize >= theItems.length) {
+      ensureCapacity(theSize * 2 + 1);
     }
     theItems[idx] = x;
     theSize++;
   }
 
-  public AnyType remove(int idx) {
-    AnyType removedItem = theItems[idx];
+  public int remove(int idx) {
+    if (idx < 0 || idx > size()) {
+      throw new ArrayIndexOutOfBoundsException();
+    }
+    int removeItem = theItems[idx];
     for(int i = idx; i < size(); i++) {
       theItems[i] = theItems[i + 1];
     }
     theSize--;
-    return removedItem;
+    return removeItem;
   }
 
-  public java.util.Iterator<AnyType> iterator() {
-    return new ArrayListIterator();
-  }
-
-  public class ArrayListIterator implements java.util.Iterator<AnyType> {
-    private int current = 0;
-
-    public boolean hasNext() {
-      return current < size();
-    }
-
-    public AnyType next() {
-      if (!hasNext()) {
-        throw new java.util.NoSuchElementException();
-      }
-      return theItems[current++];
-    }
-
-    public void remove() {
-      MyArrayList.this.remove(--current);
+  public void printList() {
+    for(int i = 0; i < size(); i++) {
+      System.out.println(theItems[i]);
     }
   }
 }
