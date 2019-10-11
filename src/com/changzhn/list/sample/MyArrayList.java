@@ -61,15 +61,19 @@ public class MyArrayList {
   }
 
   public boolean add(int x) {
-    add(theSize, x);
+    insert(theSize, x);
     return true;
   }
 
-  // 向末尾追回一项
-  private void add(int idx, int x) {
+  public void insert(int idx, int x) {
     if (theSize >= theItems.length) {
       ensureCapacity(theSize * 2 + 1);
     }
+
+    for(int i = size(); i > idx; i--) {
+        theItems[i] = theItems[i - 1];
+    }
+
     theItems[idx] = x;
     theSize++;
   }
