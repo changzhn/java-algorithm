@@ -95,4 +95,19 @@ public class MyArrayList {
       System.out.println(theItems[i]);
     }
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(String.format("Array的容量=%d, 元素个数=%d \n", theItems.length, theSize));
+    sb.append("[");
+    for(int i = 0; i < theSize; i++) {
+      sb.append(theItems[i]);
+      if (i < theSize - 1) {
+        sb.append(", ");
+      }
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 }
